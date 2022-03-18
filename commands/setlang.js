@@ -45,7 +45,7 @@ module.exports = {
             await db.query("INSERT INTO langs SET ?", [{ id: message.activity.author.id, lang: targetLang }]);
         }
         else {
-            await db.query("UPDATE langs SET langs.lang = ?", [targetLang]);
+            await db.query("UPDATE langs SET langs.lang = ? WHERE langs.id = ?", [targetLang, message.author.id]);
         }
         reply(responses.done[lang]);
     }
