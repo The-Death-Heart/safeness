@@ -91,7 +91,7 @@ module.exports = {
                             value: "agents"
                         },
                         {
-                            label: "main",
+                            label: "Main",
                             value: "main"
                         }
                     )
