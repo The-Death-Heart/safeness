@@ -94,7 +94,7 @@ client.on("messageCreate", async message => {
         }
         else return false;
     });
-    if (!foundCmd) return reply(`Comando no encontrado - command not found`);
+    if (!foundCmd) return reply("```\n" + `${prefix}${cmd}\n${createSpaces(prefix.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
     try {
         foundCmd.execute(message, args, reply, getInput, cmd);
     }
@@ -204,5 +204,29 @@ client.on("interactionCreate", async interaction => {
         }
     }
 });
+/**
+ * 
+ * @param {number} length 
+ * @returns 
+ */
+function createSpaces(length) {
+    let spaces = "";
+    for (let i = 0; i < length; i++) {
+        spaces += " ";
+    }
+    return spaces;
+}
+/**
+ * 
+ * @param {number} length 
+ * @returns 
+ */
+function createArrows(length) {
+    let arrows = "";
+    for (let i = 0; i < length; i++) {
+        arrows += "^";
+    }
+    return arrows;
+}
 
 client.login(data.token);
