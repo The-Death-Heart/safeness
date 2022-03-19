@@ -5,9 +5,6 @@ const data = {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME
     },
-    /**
-     * @type {number}
-     */
-    port: process.env.PORT
+    token: process.env.TOKEN
 }
 module.exports = data;
