@@ -1,4 +1,4 @@
-const { Collection, Client, MessageEmbed, MessageActionRow, MessageButton, Message } = require("discord.js");
+const { Collection, Client, MessageEmbed, MessageActionRow, MessageButton, Message, MessageSelectMenu } = require("discord.js");
 const db = require("./database/db");
 const logs = require("./logs");
 const fs = require("fs");
@@ -48,7 +48,7 @@ client.on("messageCreate", async message => {
      * @returns {Promise<Message>}
      */
     async function getInput() {
-        const filter = m => m.author.id === message.author.id;
+        const filter = m => m.user.id === message.author.id;
         const collected = await message.channel.awaitMessages({ filter, max: 1 });
         return collected.first();
     }
@@ -66,7 +66,7 @@ client.on("messageCreate", async message => {
         return await message.reply(content).catch(err => {
             logs.error("bot", err.stack);
             try {
-            message.channel.send(content);
+                message.channel.send(content);
             }
             catch (err2) {
                 logs.error('bot', err2.stack);
@@ -93,4 +93,106 @@ client.on("messageCreate", async message => {
         reply("An unexpected error ocurred");
     }
 });
+
+client.on("interactionCreate", async interaction => {
+    const foundLang = await db.query("SELECT lang FROM langs WHERE langs.id = ?", [interaction.user.id]);
+    const lang = foundLang[0] ? foundLang[0] : "es";
+    if (interaction.isSelectMenu()) {
+            if (interaction.customId.startsWith("help-menu")) {
+                if (!interaction.guild) return;
+                const authorId = interaction.customId.slice("help-menu-".length);
+                const deniedResponses = {
+                    es: "No puedes modificar el comando help de otro usuario",
+                    en: "You cannot modify the help command of another user"
+                }
+                if (authorId !== interaction.user.id) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
+                let prefix;
+                const foundPrefix = await db.query("SELECT prefix FROM prefixes WHERE prefixes.guildId = ?", [interaction.guild.id]);
+                if (foundPrefix[0]) prefix = foundPrefix[0];
+                else prefix = data.defaultPrefix;
+                const user = interaction.user;
+                const texts = {
+                    desc: {
+                        es: `Safeness es un bot hecho para ayudarte a proteger y administrar tu servidor`,
+                        en: `Safeness is a bot made to help you to protect and manage your server`
+                    },
+                    instruction: {
+                        es: `Utiliza el menu de abajo para navegar por las secciones`,
+                        en: `Use the menu below to navigate through the sections`,
+                        title: {
+                            es: "Instrucciones",
+                            en: "Instructions"
+                        }
+                    },
+                    protection: {
+                        es: "Protección",
+                        en: "Protection"
+                    },
+                    config: {
+                        es: "Configuración",
+                        en: "Configuration"
+                    },
+                    mod: {
+                        es: "Moderación",
+                        en: "Moderation"
+                    },
+                    others: {
+                        es: "Otros",
+                        en: "Others"
+                    },
+                    agents: {
+                        es: "Agentes",
+                        en: "Agents"
+                    },
+                    placeholder: {
+                        es: "Selecciona una sección...",
+                        en: "Select a section..."
+                    }
+                }
+                const mainEmbed = new MessageEmbed()
+                    .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                    .setTitle("Safeness")
+                    .setDescription(texts.desc[lang])
+                    .addField(texts.instruction.title[lang], texts.instruction[lang])
+                    .setColor("GREEN")
+                    const commands = {
+                        protection: client.commands.filter(c => c.category === "protection"),
+                        config: client.commands.filter(c => c.category === "configuration"),
+                        mod: client.commands.filter(c => c.category === "moderation"),
+                        others: client.commands.filter(c => c.category === "others"),
+                        agents: client.commands.filter(c => c.category === "agents")
+                    }
+                    const embeds = {
+                        protection: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle(texts.protection[lang])
+                        .setDescription(commands.protection.size > 0 ? commands.protection.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                        .setColor("GREEN"),
+                        config: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle(texts.config[lang])
+                        .setDescription(commands.config.size > 0 ? commands.config.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setColor("GREEN"),
+                        main: mainEmbed,
+                        mod: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle(texts.mod[lang])
+                        .setDescription(commands.mod.size > 0 ? commands.mod.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setColor("GREEN"),
+                        others: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle(texts.others[lang])
+                        .setDescription(commands.others.size > 0 ? commands.others.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setColor("GREEN"),
+                        agents: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle(texts.agents[lang])
+                        .setDescription(commands.agents.size > 0 ? commands.agents.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                    }
+                    await interaction.deferUpdate();
+                    interaction.message.edit({ embeds: [embeds[interaction.values[0]]] });
+            }
+    }
+});
+
 client.login(data.token);
