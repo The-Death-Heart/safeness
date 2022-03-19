@@ -2,7 +2,14 @@ const { Message } = require("discord.js");
 const db = require("../database/db");
 module.exports = {
     name: "setlang",
-    description: "",
+    description: {
+        es: "Sirve para cambiar el idioma del bot (individual)",
+        en: "Used to change the bot's language (individual)"
+    },
+    category: {
+        es: "otros",
+        en: "others"
+    },
     aliases: [],
     /**
      * 
