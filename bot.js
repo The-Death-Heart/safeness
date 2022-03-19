@@ -98,12 +98,12 @@ client.on("interactionCreate", async interaction => {
     const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [interaction.user.id]);
     const lang = foundLang[0] ? foundLang[0].lang : "es";
     if (interaction.isSelectMenu()) {
-            if (interaction.customId.startsWith("help-menu")) {
+            if (interaction.customId.startsWith("commands-menu")) {
                 if (!interaction.guild) return;
-                const authorId = interaction.customId.slice("help-menu-".length);
+                const authorId = interaction.customId.slice("commands-menu-".length);
                 const deniedResponses = {
-                    es: "No puedes modificar el comando help de otro usuario",
-                    en: "You cannot modify the help command of another user"
+                    es: "No puedes modificar el menu de otro usuario",
+                    en: "You cannot modify the menu of another user"
                 }
                 if (authorId !== interaction.user.id) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
                 let prefix;
