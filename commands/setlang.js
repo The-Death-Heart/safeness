@@ -6,8 +6,8 @@ module.exports = {
         es: "Cambia el idioma del bot (individual)",
         en: "Changes the bot's lang (invididual)"
     },
-    category: "others",
     aliases: [],
+    category: "others",
     /**
      * 
      * @param {Message} message 
