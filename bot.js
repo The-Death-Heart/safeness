@@ -2,6 +2,7 @@ const { Collection, Client, MessageEmbed, MessageActionRow, MessageButton, Messa
 const db = require("./database/db");
 const logs = require("./logs");
 const fs = require("fs");
+const data = require("./data/data");
 const client = new Client({
     intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]
 });
@@ -83,3 +84,4 @@ client.on("message", async message => {
         reply("An unexpected error ocurred");
     }
 });
+client.login(data.token);
