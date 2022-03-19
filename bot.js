@@ -160,7 +160,8 @@ client.on("interactionCreate", async interaction => {
                         config: client.commands.filter(c => c.category === "configuration"),
                         mod: client.commands.filter(c => c.category === "moderation"),
                         others: client.commands.filter(c => c.category === "others"),
-                        agents: client.commands.filter(c => c.category === "agents")
+                        agents: client.commands.filter(c => c.category === "agents"),
+                        premium: client.commands.filter(c => c.category === "premium")
                     }
                     const embeds = {
                         protection: new MessageEmbed()
@@ -171,23 +172,29 @@ client.on("interactionCreate", async interaction => {
                         config: new MessageEmbed()
                         .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
                         .setTitle(texts.config[lang])
-                        .setDescription(commands.config.size > 0 ? commands.config.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setDescription(commands.config.size > 0 ? commands.config.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
                         .setColor("GREEN"),
                         main: mainEmbed,
                         mod: new MessageEmbed()
                         .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
                         .setTitle(texts.mod[lang])
-                        .setDescription(commands.mod.size > 0 ? commands.mod.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setDescription(commands.mod.size > 0 ? commands.mod.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
                         .setColor("GREEN"),
                         others: new MessageEmbed()
                         .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
                         .setTitle(texts.others[lang])
-                        .setDescription(commands.others.size > 0 ? commands.others.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setDescription(commands.others.size > 0 ? commands.others.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
                         .setColor("GREEN"),
                         agents: new MessageEmbed()
                         .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
                         .setTitle(texts.agents[lang])
-                        .setDescription(commands.agents.size > 0 ? commands.agents.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`) : "none")
+                        .setDescription(commands.agents.size > 0 ? commands.agents.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                        .setColor("GREEN"),
+                        premium: new MessageEmbed()
+                        .setAuthor({ url: user.displayAvatarURL({ dynamic: true }), name: user.tag })
+                        .setTitle("Premium")
+                        .setDescription(commands.premium.size > 0 ? commands.premium.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                        .setColor("YELLOW")
                     }
                     await interaction.deferUpdate();
                     interaction.message.edit({ embeds: [embeds[interaction.values[0]]] });
