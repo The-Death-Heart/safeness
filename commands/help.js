@@ -6,10 +6,7 @@ module.exports = {
         es: "Despliega este menu",
         en: "Displays this menu"
     },
-    category: {
-        es: "",
-        en: ""
-    },
+    category: "",
     aliases: ["ayuda"],
     /**
      * 
@@ -93,6 +90,10 @@ module.exports = {
                         {
                             label: texts.agents[lang],
                             value: "agents"
+                        },
+                        {
+                            label: "main",
+                            value: "main"
                         }
                     )
                     .setCustomId(`help-menu-${author.id}`)

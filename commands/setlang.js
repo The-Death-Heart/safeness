@@ -6,10 +6,7 @@ module.exports = {
         es: "Sirve para cambiar el idioma del bot (individual)",
         en: "Used to change the bot's language (individual)"
     },
-    category: {
-        es: "otros",
-        en: "others"
-    },
+    category: "others",
     aliases: [],
     /**
      * 
