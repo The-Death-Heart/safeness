@@ -73,7 +73,7 @@ client.on("messageCreate", async message => {
             }
         });
     }
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.toLowerCase().startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
     if (cmd === "" || cmd === " ") return;
@@ -95,8 +95,8 @@ client.on("messageCreate", async message => {
 });
 
 client.on("interactionCreate", async interaction => {
-    const foundLang = await db.query("SELECT lang FROM langs WHERE langs.id = ?", [interaction.user.id]);
-    const lang = foundLang[0] ? foundLang[0] : "es";
+    const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [interaction.user.id]);
+    const lang = foundLang[0] ? foundLang[0].lang : "es";
     if (interaction.isSelectMenu()) {
             if (interaction.customId.startsWith("help-menu")) {
                 if (!interaction.guild) return;
@@ -107,8 +107,8 @@ client.on("interactionCreate", async interaction => {
                 }
                 if (authorId !== interaction.user.id) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
                 let prefix;
-                const foundPrefix = await db.query("SELECT prefix FROM prefixes WHERE prefixes.guildId = ?", [interaction.guild.id]);
-                if (foundPrefix[0]) prefix = foundPrefix[0];
+                const foundPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [interaction.guild.id]);
+                if (foundPrefix[0]) prefix = foundPrefix[0].prefix;
                 else prefix = data.defaultPrefix;
                 const user = interaction.user;
                 const texts = {
