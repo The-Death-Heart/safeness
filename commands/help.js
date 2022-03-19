@@ -58,7 +58,6 @@ module.exports = {
             }
         }
         const mainEmbed = new MessageEmbed()
-            .setAuthor({ url: author.displayAvatarURL({ dynamic: true }), name: author.tag })
             .setTitle("Safeness")
             .setDescription(texts.desc[lang])
             .addField(texts.instruction.title[lang], texts.instruction[lang])
@@ -85,7 +84,7 @@ module.exports = {
                         },
                         {
                             label: "Premium",
-                            value: "premium,"
+                            value: "premium"
                         },
                         {
                             label: texts.agents[lang],
