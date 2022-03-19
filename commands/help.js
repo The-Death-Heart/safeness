@@ -17,8 +17,8 @@ module.exports = {
      */
     execute: async function (message, args, reply, getInput) {
         const { author, channel, guild, client, member } = message;
-        const foundLang = db.query("SELECT lang FROM langs WHERE langs.id = ?", [author.id]);
-        const lang = foundLang.length > 0 ? foundLang[0] : "es";
+        const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [author.id]);
+        const lang = foundLang[0] ? foundLang[0].lang : "es";
         const texts = {
             desc: {
                 es: `Safeness es un bot hecho para ayudarte a proteger y administrar tu servidor`,
