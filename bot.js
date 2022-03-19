@@ -98,100 +98,100 @@ client.on("interactionCreate", async interaction => {
     const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [interaction.user.id]);
     const lang = foundLang[0] ? foundLang[0].lang : "es";
     if (interaction.isSelectMenu()) {
-            if (interaction.customId.startsWith("commands-menu")) {
-                if (!interaction.guild) return;
-                const authorId = interaction.customId.slice("commands-menu-".length);
-                const deniedResponses = {
-                    es: "No puedes modificar el menu de otro usuario",
-                    en: "You cannot modify the menu of another user"
-                }
-                if (authorId !== interaction.user.id) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
-                let prefix;
-                const foundPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [interaction.guild.id]);
-                if (foundPrefix[0]) prefix = foundPrefix[0].prefix;
-                else prefix = data.defaultPrefix;
-                const user = interaction.user;
-                const texts = {
-                    desc: {
-                        es: `Safeness es un bot hecho para ayudarte a proteger y administrar tu servidor`,
-                        en: `Safeness is a bot made to help you to protect and manage your server`
-                    },
-                    instruction: {
-                        es: `Utiliza el menu de abajo para navegar por las secciones`,
-                        en: `Use the menu below to navigate through the sections`,
-                        title: {
-                            es: "Instrucciones",
-                            en: "Instructions"
-                        }
-                    },
-                    protection: {
-                        es: "Protección",
-                        en: "Protection"
-                    },
-                    config: {
-                        es: "Configuración",
-                        en: "Configuration"
-                    },
-                    mod: {
-                        es: "Moderación",
-                        en: "Moderation"
-                    },
-                    others: {
-                        es: "Otros",
-                        en: "Others"
-                    },
-                    agents: {
-                        es: "Agentes",
-                        en: "Agents"
-                    },
-                    placeholder: {
-                        es: "Selecciona una sección...",
-                        en: "Select a section..."
-                    }
-                }
-                const mainEmbed = new MessageEmbed()
-                    .setTitle("Safeness")
-                    .setDescription(texts.desc[lang])
-                    .addField(texts.instruction.title[lang], texts.instruction[lang])
-                    .setColor("GREEN")
-                    const commands = {
-                        protection: client.commands.filter(c => c.category === "protection"),
-                        config: client.commands.filter(c => c.category === "configuration"),
-                        mod: client.commands.filter(c => c.category === "moderation"),
-                        others: client.commands.filter(c => c.category === "others"),
-                        agents: client.commands.filter(c => c.category === "agents"),
-                        premium: client.commands.filter(c => c.category === "premium")
-                    }
-                    const embeds = {
-                        protection: new MessageEmbed()
-                        .setTitle(texts.protection[lang])
-                        .setDescription(commands.protection.size > 0 ? commands.protection.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("GREEN"),
-                        config: new MessageEmbed()
-                        .setTitle(texts.config[lang])
-                        .setDescription(commands.config.size > 0 ? commands.config.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("GREEN"),
-                        main: mainEmbed,
-                        mod: new MessageEmbed()
-                        .setTitle(texts.mod[lang])
-                        .setDescription(commands.mod.size > 0 ? commands.mod.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("GREEN"),
-                        others: new MessageEmbed()
-                        .setTitle(texts.others[lang])
-                        .setDescription(commands.others.size > 0 ? commands.others.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("GREEN"),
-                        agents: new MessageEmbed()
-                        .setTitle(texts.agents[lang])
-                        .setDescription(commands.agents.size > 0 ? commands.agents.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("GREEN"),
-                        premium: new MessageEmbed()
-                        .setTitle("Premium")
-                        .setDescription(commands.premium.size > 0 ? commands.premium.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
-                        .setColor("YELLOW")
-                    }
-                    await interaction.deferUpdate();
-                    interaction.message.edit({ embeds: [embeds[interaction.values[0]]] });
+        if (interaction.customId.startsWith("commands-menu")) {
+            if (!interaction.guild) return;
+            const authorId = interaction.customId.slice("commands-menu-".length);
+            const deniedResponses = {
+                es: "No puedes modificar el menu de otro usuario",
+                en: "You cannot modify the menu of another user"
             }
+            if (authorId !== interaction.user.id) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
+            let prefix;
+            const foundPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [interaction.guild.id]);
+            if (foundPrefix[0]) prefix = foundPrefix[0].prefix;
+            else prefix = data.defaultPrefix;
+            const user = interaction.user;
+            const texts = {
+                desc: {
+                    es: `Safeness es un bot hecho para ayudarte a proteger y administrar tu servidor`,
+                    en: `Safeness is a bot made to help you to protect and manage your server`
+                },
+                instruction: {
+                    es: `Utiliza el menu de abajo para navegar por las secciones`,
+                    en: `Use the menu below to navigate through the sections`,
+                    title: {
+                        es: "Instrucciones",
+                        en: "Instructions"
+                    }
+                },
+                protection: {
+                    es: "Protección",
+                    en: "Protection"
+                },
+                config: {
+                    es: "Configuración",
+                    en: "Configuration"
+                },
+                mod: {
+                    es: "Moderación",
+                    en: "Moderation"
+                },
+                others: {
+                    es: "Otros",
+                    en: "Others"
+                },
+                agents: {
+                    es: "Agentes",
+                    en: "Agents"
+                },
+                placeholder: {
+                    es: "Selecciona una sección...",
+                    en: "Select a section..."
+                }
+            }
+            const mainEmbed = new MessageEmbed()
+                .setTitle("Safeness")
+                .setDescription(texts.desc[lang])
+                .addField(texts.instruction.title[lang], texts.instruction[lang])
+                .setColor("GREEN")
+            const commands = {
+                protection: client.commands.filter(c => c.category === "protection"),
+                config: client.commands.filter(c => c.category === "configuration"),
+                mod: client.commands.filter(c => c.category === "moderation"),
+                others: client.commands.filter(c => c.category === "others"),
+                agents: client.commands.filter(c => c.category === "agents"),
+                premium: client.commands.filter(c => c.category === "premium")
+            }
+            const embeds = {
+                protection: new MessageEmbed()
+                    .setTitle(texts.protection[lang])
+                    .setDescription(commands.protection.size > 0 ? commands.protection.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("GREEN"),
+                config: new MessageEmbed()
+                    .setTitle(texts.config[lang])
+                    .setDescription(commands.config.size > 0 ? commands.config.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("GREEN"),
+                main: mainEmbed,
+                mod: new MessageEmbed()
+                    .setTitle(texts.mod[lang])
+                    .setDescription(commands.mod.size > 0 ? commands.mod.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("GREEN"),
+                others: new MessageEmbed()
+                    .setTitle(texts.others[lang])
+                    .setDescription(commands.others.size > 0 ? commands.others.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("GREEN"),
+                agents: new MessageEmbed()
+                    .setTitle(texts.agents[lang])
+                    .setDescription(commands.agents.size > 0 ? commands.agents.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("GREEN"),
+                premium: new MessageEmbed()
+                    .setTitle("Premium")
+                    .setDescription(commands.premium.size > 0 ? commands.premium.map(cmd => `**${prefix}${cmd.name}** - ${cmd.description[lang]}`).join("\n\n") : "none")
+                    .setColor("YELLOW")
+            }
+            await interaction.deferUpdate();
+            interaction.message.edit({ embeds: [embeds[interaction.values[0]]] });
+        }
     }
 });
 
