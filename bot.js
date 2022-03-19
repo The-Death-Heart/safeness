@@ -1,6 +1,6 @@
 const { Collection, Client, MessageEmbed, MessageActionRow, MessageButton, Message } = require("discord.js");
 const db = require("./database/db");
-const logs = require("./logs/logs");
+const logs = require("./logs");
 const fs = require("fs");
 const client = new Client({
     intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]
