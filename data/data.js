@@ -5,6 +5,7 @@ const data = {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME
     },
-    token: process.env.TOKEN
+    token: process.env.TOKEN,
+    defaultPrefix: "s!"
 }
 module.exports = data;
