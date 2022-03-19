@@ -1,2 +1,2 @@
-const db = require("../db");
+const db = require("../database/db");
 db.query("CREATE TABLE IF NOT EXISTS langs (id TEXT NOT NULL, lang VARCHAR(2) NOT NULL DEFAULT 'es')");

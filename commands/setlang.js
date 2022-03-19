@@ -1,5 +1,5 @@
 const { Message } = require("discord.js");
-const db = require("../db");
+const db = require("../database/db");
 module.exports = {
     name: "setlang",
     description: "",
