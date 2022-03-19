@@ -1,13 +1,13 @@
 const { Message, MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = require("discord.js");
 const db = require("../database/db");
 module.exports = {
-    name: "help",
+    name: "commands",
     description: {
         es: "Despliega este menu",
         en: "Displays this menu"
     },
-    category: "",
-    aliases: ["ayuda"],
+    category: "others",
+    aliases: ["comandos"],
     /**
      * 
      * @param {Message} message 
@@ -95,7 +95,7 @@ module.exports = {
                             value: "main"
                         }
                     )
-                    .setCustomId(`help-menu-${author.id}`)
+                    .setCustomId(`commands-menu-${author.id}`)
                     .setPlaceholder(texts.placeholder[lang])
             );
         await reply({ embeds: [mainEmbed], components: [row] });
