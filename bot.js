@@ -36,8 +36,14 @@ client.on("ready", async () => {
     logs.info('bot', `Loaded ${loadedCommands}/${commandsDir.length} commands`);
 });
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if (!message.guild || message.author.bot) return;
+    let prefix;
+    const foundPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [message.guild.id]);
+    if (foundPrefix[0]) {
+        prefix = foundPrefix[0].prefix;
+    }
+    else prefix = data.defaultPrefix;
     /**
      * @returns {Promise<Message>}
      */
@@ -63,7 +69,6 @@ client.on("message", async message => {
             message.channel.send(content);
         });
     }
-    const prefix = ".";
     if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
