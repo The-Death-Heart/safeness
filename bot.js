@@ -32,6 +32,7 @@ for (const f of commandsDir) {
 
 client.on("ready", async () => {
     logs.success('bot', 'Successfully connected to discord');
+    logs.info('bot', `Loaded ${loadedCommands}/${commandsDir.length} commands`);
 });
 
 client.on("message", async message => {
