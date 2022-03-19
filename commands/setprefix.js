@@ -40,7 +40,7 @@ module.exports = {
         function createArrows(length) {
             let arrows = "";
             for (let i = 0; i< length; i++) {
-                arrows = "^";
+                arrows += "^";
             }
             return arrows;
         }
@@ -51,7 +51,7 @@ module.exports = {
         let lastPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
         lastPrefix = lastPrefix[0] ? lastPrefix[0].prefix : data.defaultPrefix;
         const newPrefix = args[0];
-        if (!newPrefix) return reply("```\n" + `${client.prefix}setprefix {prefix}\n${createSpaces(`${client.prefix}setprefix {`.length)}${createArrows("prefix".length)}\n\nERR: Missing parameter` + "");
+        if (!newPrefix) return reply("```\n" + `${client.prefix}setprefix {prefix}\n${createSpaces(client.prefix.length)}           ${createArrows("prefix".length)}\n\nERR: Missing parameter` + "\n```");
         if (newPrefix === lastPrefix) return reply("```\n" + `${client.prefix}setprefix ${newPrefix}\n${createSpaces(`${client.prefix}setprefix`.length + 1)}${createArrows(newPrefix.length)}\n\nERR: Cannot set same prefix` + "\n```");
         if (newPrefix.length > 4) return reply("```\n" + `${client.prefix}setprefix ${newPrefix}\n${createSpaces(`${client.prefix}setprefix`.length + 1)}${createArrows(newPrefix.length)}\n\nERR: New prefix exceeds the 4 characters limit` + "\n```");
         const prefixExists = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
