@@ -65,8 +65,12 @@ client.on("messageCreate", async message => {
         }
         return await message.reply(content).catch(err => {
             logs.error("bot", err.stack);
-            content = content.content;
+            try {
             message.channel.send(content);
+            }
+            catch (err2) {
+                logs.error('bot', err2.stack);
+            }
         });
     }
     if (!message.content.startsWith(prefix)) return;
