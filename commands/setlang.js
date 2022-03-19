@@ -16,6 +16,7 @@ module.exports = {
      * @param {function} getInput 
      */
     execute: async function (message, args, reply, getInput) {
+        const { client } = message;
         let foundL = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
         let lang = foundL[0] ? foundL[0].lang : "es";
         const responses = {
