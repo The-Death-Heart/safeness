@@ -49,7 +49,7 @@ client.on("messageCreate", async message => {
      * @returns {Promise<Message>}
      */
     async function getInput() {
-        const filter = m => m.user.id === message.author.id;
+        const filter = m => m.author.id === message.author.id;
         const collected = await message.channel.awaitMessages({ filter, max: 1 });
         return collected.first();
     }
@@ -201,6 +201,66 @@ client.on("interactionCreate", async interaction => {
             }
             await interaction.deferUpdate();
             interaction.message.edit({ embeds: [embeds[interaction.values[0]]] });
+        }
+    }
+    else if (interaction.isButton()) {
+        if (interaction.customId.startsWith("execute-command")) {
+            let data = interaction.customId.slice("execute-command".length).trim().split("-");
+            data.shift();
+            const commandName = data[0];
+            const authorId = data[1];
+            const messageId = data[2];
+            const deniedResponses = {
+                es: "No puedes ejecutar el comando de otro usuario",
+                en: "You cannot execute the command of another user"
+            }
+            const texts = {
+                askArgs: {
+                    es: "Introduce los argumentos que van a ser pasados al comando",
+                    en: "Enter the arguments that will be passed to the command"
+                }
+            }
+            if (interaction.user.id !== authorId) return interaction.reply({ content: deniedResponses[lang], ephemeral: true });
+            await interaction.deferReply({ ephemeral: false });
+            const command = client.commands.get(commandName);
+            /**
+             * @returns {Promise<Message>}
+             */
+            async function getInput() {
+                const filter = m => m.author.id === interaction.user.id;
+                const collected = await interaction.channel.awaitMessages({ filter, max: 1 });
+                return collected.first();
+            }
+            await interaction.editReply(texts.askArgs[lang]);
+            const repli = await interaction.fetchReply();
+            const msg = await getInput();
+            const args = msg.content.trim().split(/ +/g);
+            await interaction.message.delete();
+            await repli.delete();
+            await interaction.channel.messages.fetch();
+            await interaction.channel.messages.cache.get(messageId).delete();
+            /**
+             * @param {string | object} content
+             * @returns {Promise<Message>}
+             */
+            async function reply(content) {
+                if (typeof content === "object") {
+                    content.allowedMentions = { repliedUser: false };
+                }
+                else if (typeof content === "string") {
+                    content = { content, allowedMentions: { repliedUser: false } }
+                }
+                return await msg.reply(content).catch(err => {
+                    logs.error("bot", err.stack);
+                    try {
+                        msg.channel.send(content);
+                    }
+                    catch (err2) {
+                        logs.error('bot', err2.stack);
+                    }
+                });
+            }
+            await command.execute(msg, args, reply, getInput, command.name);
         }
     }
 });
