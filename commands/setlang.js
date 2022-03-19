@@ -48,5 +48,6 @@ module.exports = {
             await db.query("UPDATE langs SET langs.lang = ? WHERE langs.id = ?", [targetLang, message.author.id]);
         }
         reply(responses.done[lang]);
+        quecoñoesesto
     }
 }
