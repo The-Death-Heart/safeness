@@ -16,38 +16,44 @@ module.exports = {
      * @param {function} getInput 
      */
     execute: async function(message, args, reply, getInput) {
-        const responses = {
-            noPerms: {
-                es: "No tienes permisos para ejecutar este comando",
-                en: "You don't have permissions to execute this command"
-            },
-            samePrefixError: {
-                es: "No puedes establecer el mismo prefijo",
-                en: "You cannot establish the same prefix"
-            },
-            lengthError: {
-                es: "El prefix no puede tener más de 4 caracteres",
-                en: "The prefix cannot have more than 4 characters"
-            },
-            noPrefix: {
-                es: "Debes introducir el nuevo prefijo",
-                en: "You must enter the new prefix"
-            },
-            done: {
-                es: "Prefijo establecido",
-                en: "Prefix established"
+        const done = {
+            es: "Prefijo establecido",
+            en: "Prefix established"
+        }
+        /**
+         * 
+         * @param {number} length 
+         * @returns 
+         */
+        function createSpaces(length) {
+            let spaces = "";
+            for (let i = 0; i < length; i++) {
+                spaces += " ";
             }
+            return spaces;
+        }
+        /**
+         * 
+         * @param {number} length 
+         * @returns 
+         */
+        function createArrows(length) {
+            let arrows = "";
+            for (let i = 0; i< length; i++) {
+                arrows = "^";
+            }
+            return arrows;
         }
         const { author, guild, channel, member, client } = message;
         const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [author.id]);
         const lang = foundLang[0] ? foundLang[0].lang : "es";
-        if (!member.permissions.has("MANAGE_GUILD")) return reply(responses.noPerms[lang]);
+        if (!member.permissions.has("MANAGE_GUILD")) return reply("```\n" + `${client.prefix}setprefix\n${createSpaces(client.prefix.length)}^^^^^^^^^\n\nERR: Missing permissions` + "\n```");
         let lastPrefix = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
         lastPrefix = lastPrefix[0] ? lastPrefix[0].prefix : data.defaultPrefix;
         const newPrefix = args[0];
-        if (!newPrefix) return reply(responses.noPrefix[lang]);
-        if (newPrefix === lastPrefix) return reply(responses.samePrefixError[lang]);
-        if (newPrefix.length > 4) return reply(responses.lengthError[lang]);
+        if (!newPrefix) return reply("```\n" + `${client.prefix}setprefix {prefix}\n${createSpaces(`${client.prefix}setprefix {`.length)}${createArrows("prefix".length)}\n\nERR: Missing parameter` + "");
+        if (newPrefix === lastPrefix) return reply("```\n" + `${client.prefix}setprefix ${newPrefix}\n${createSpaces(`${client.prefix}setprefix`.length + 1)}${createArrows(newPrefix.length)}\n\nERR: Cannot set same prefix` + "\n```");
+        if (newPrefix.length > 4) return reply("```\n" + `${client.prefix}setprefix ${newPrefix}\n${createSpaces(`${client.prefix}setprefix`.length + 1)}${createArrows(newPrefix.length)}\n\nERR: New prefix exceeds the 4 characters limit` + "\n```");
         const prefixExists = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
         if (prefixExists[0]) {
             await db.query("UPDATE prefixes SET ? WHERE prefixes.guildId = ?", [{ prefix: newPrefix }, guild.id]);
@@ -55,6 +61,6 @@ module.exports = {
         else {
             await db.query("INSERT INTO prefixes SET ?", [{ guildId: guild.id, prefix: newPrefix }]);
         }
-        reply(responses.done[lang]);
+        reply(done[lang]);
     }
 }
