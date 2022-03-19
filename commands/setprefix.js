@@ -4,8 +4,8 @@ const db = require("../database/db");
 module.exports = {
     name: "setprefix",
     description: {
-        es: "Sirve para cambiar el prefijo del servidor",
-        en: "Used to change the server's prefix"
+        es: "Cambia el prefijo del servidor",
+        en: "Changes the server's prefix"
     },
     category: "configuration",
     /**

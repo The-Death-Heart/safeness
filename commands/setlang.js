@@ -3,8 +3,8 @@ const db = require("../database/db");
 module.exports = {
     name: "setlang",
     description: {
-        es: "Sirve para cambiar el idioma del bot (individual)",
-        en: "Used to change the bot's language (individual)"
+        es: "Cambia el idioma del bot (individual)",
+        en: "Changes the bot's lang (invididual)"
     },
     category: "others",
     aliases: [],
