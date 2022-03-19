@@ -44,6 +44,7 @@ client.on("messageCreate", async message => {
         prefix = foundPrefix[0].prefix;
     }
     else prefix = data.defaultPrefix;
+    client.prefix = prefix;
     /**
      * @returns {Promise<Message>}
      */
@@ -73,6 +74,15 @@ client.on("messageCreate", async message => {
             }
         });
     }
+    if (message.content.toLowerCase().startsWith(`<@${client.user.id}>`) || message.content.toLowerCase().startsWith(`<@!${client.user.id}>`)) {
+        const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
+        const lang = foundLang[0] ? foundLang[0].lang : "es";
+        const text = {
+            es: `Mi prefijo en este servidor es **${prefix}**\n\nPara ver mis comandos usa el comando ${prefix}comandos\n\nPara obtener info del bot usa el comando \`${prefix}ayuda\`\n\nSi deseas obtener información de un comando concreto, usa \`${prefix}comando {comando}\``,
+            en: `My prefix on this server is **${prefix}**\n\nTo see my commands use the command \`${prefix}commands\`\n\nTo get bot's info use the command ${prefix}help\n\nIf you wish to get info of an specific command, use the command \`${prefix}command {command}\``
+        }
+        return reply(text[lang]);
+    }
     if (!message.content.toLowerCase().startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
@@ -86,7 +96,7 @@ client.on("messageCreate", async message => {
     });
     if (!foundCmd) return reply(`Comando no encontrado - command not found`);
     try {
-        foundCmd.execute(message, args, reply, getInput);
+        foundCmd.execute(message, args, reply, getInput, cmd);
     }
     catch (err) {
         logs.error(`Error while executing command ${foundCmd.name}\n${err.stack}`);
