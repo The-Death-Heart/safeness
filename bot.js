@@ -47,7 +47,6 @@ client.on("messageCreate", async message => {
     else prefix = data.defaultPrefix;
     client.prefix = prefix;
     const blacklist = await db.query("SELECT * FROM blacklist");
-    if (blacklist.find(u => u.userId === message.author.id)) return message.react("❌");
     /**
      * @returns {Promise<Message>}
      */
@@ -87,6 +86,7 @@ client.on("messageCreate", async message => {
         return reply(text[lang]);
     }
     if (!message.content.toLowerCase().startsWith(prefix)) return;
+    if (blacklist.find(u => u.userId === message.author.id)) return message.react("❌");
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
     if (cmd === "" || cmd === " ") return;
@@ -98,7 +98,7 @@ client.on("messageCreate", async message => {
         else return false;
     });
     const foundStaff = await db.query("SELECT * FROM staffs WHERE staffs.id = ?", [message.author.id]);
-    if (!foundCmd || foundCmd && foundCmd.category === "staff" && !foundStaff[0] || foundStaff[0].rank < foundCmd.minRank) return reply("```\n" + `${prefix}${cmd}\n${createSpaces(prefix.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
+    if (!foundCmd || foundCmd && foundCmd.category === "staff" && !foundStaff[0] || foundStaff[0] && foundStaff[0].rank < foundCmd.minRank) return reply("```\n" + `${prefix}${cmd}\n${createSpaces(prefix.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
     try {
         foundCmd.execute(message, args, reply, getInput, cmd);
     }
