@@ -57,7 +57,7 @@ module.exports = {
         const uptime = moment.duration(message.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
-        .addField(`
+        .addField(`Información del bot`, `
                 **${texts.cachedU[lang]}:** ${message.client.users.cache.size}\n
                 **${texts.channels[lang]}:** ${message.client.channels.cache.size}\n
                 **${texts.servers[lang]}:** ${message.client.guilds.cache.size}\n
