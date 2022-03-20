@@ -262,6 +262,70 @@ client.on("interactionCreate", async interaction => {
             }
             await command.execute(msg, args, reply, getInput, command.name);
         }
+        else if (interaction.customId.startsWith("remove-warn")) {
+            const data = interaction.customId.slice("remove-warn-".length).trim().split("-");
+            const authorId = data[1];
+            const targetId = data[0];
+            const deniedResponses = {
+                es: "No puedes usar el la interacción de otro usuario",
+                en: "You cannot use the interaction of another user"
+            }
+            const texts = {
+                askId: {
+                    es: "Introduce la ID de la advertencia que deseas remover",
+                    en: "Enter the ID of the warning u wish to remove"
+                },
+                errors: {
+                    notWhole: {
+                        es: "La ID debe ser un número entero",
+                        en: "The ID must be a whole number"
+                    },
+                    notNumber: {
+                        es: "La ID debe ser un número",
+                        en: "The ID must be a number"
+                    },
+                    noPerms: {
+                        es: "No tienes permisos para esto",
+                        en: "You don't have permissions for this"
+                    }
+                }
+            }
+            if (interaction.user.id !== authorId) return interaction.reply({ ephemeral: true, content: deniedResponses[lang] });
+            if (!interaction.member.permissions.has("MANAGE_MEMBERS")) return interaction.reply({ ephemeral: true, content: texts.errors.noPerms[lang] });
+            await client.users.fetch(targetId);
+            if (!interaction.guild.members.cache.has(targetId)) return interaction.reply({ ephemeral: true, content: "ERR: Member not found" });
+            await interaction.deferReply({ ephemeral: false });
+            /**
+             * @returns {Promise<Message>}
+             */
+            async function getInput() {
+                const filter = m => m.author.id === interaction.user.id;
+                const collected = await interaction.channel.awaitMessages({ filter, max: 1 });
+                return collected.first();
+            }
+            await interaction.editReply(texts.askId[lang]);
+            const repli = await interaction.fetchReply();
+            let id = await getInput();
+            if (isNaN(id.content)) {
+                await id.delete();
+                return repli.edit(texts.errors.notNumber[lang]);
+            }
+            if (!Number.isInteger(Number(id.content))) {
+                await id.delete();
+                return repli.edit(texts.errors.notWhole[lang]);
+            }
+            await id.delete();
+            id = Number(id.content);
+            const foundId = await db.query("SELECT * FROM warnings WHERE warnings.id = ?", [id]);
+            if (!foundId[0]) {
+                return repli.edit("ERR: Invalid ID");
+            }
+            if (foundId[0].userId !== targetId) {
+                return repli.edit("ERR: Invalid ID");
+            }
+            await db.query("DELETE FROM warnings WHERE warnings.id = ?", [id]);
+            await repli.edit("👍");
+        }
     }
 });
 /**

@@ -64,21 +64,32 @@ module.exports = {
             limitExceed: {
                 es: "Las advertencias superan la cantidad de 10, por lo que van a ser enviadas en un archivo .txt",
                 en: "The warnings exceeds the limit (10 warnings) so they'll be sent in a .txt file"
+            },
+            removeWarn: {
+                es: "Remover advertencia",
+                en: "Remove warning"
             }
         }
         let m = message.mentions.members.first();
         if (!m) return reply("```\n" + `${client.prefix}${aliase} {GuildMember}\n${createSpaces(`${client.prefix}${aliase} {`.length)}${createArrows("GuildMember".length)}\n\nERR: Missing parameter` + "\n```");
         const warnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
+        const row = new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+            .setCustomId(`remove-warn-${m.user.id}-${author.id}`)
+            .setLabel(texts.removeWarn[lang])
+            .setStyle("DANGER")
+        )
         if (warnings.length > 10) {
             const path = "../warnings.txt";
-            fs.writeFileSync(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}: ${warnings.length}\n\n${warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId).tag : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}`);
-            return reply({ content: texts.limitExceed[lang], files: [path] });
+            fs.writeFileSync(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}: ${warnings.length}\n\n${warnings.map(w => `[${w.id}] ${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId).tag : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}`);
+            return reply({ content: texts.limitExceed[lang], files: [path], components: [row] });
         }
         let warningsEmbed = new MessageEmbed()
         .setTitle(`${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username}`)
-        .setDescription(`${warnings.length > 0 ? warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId) : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n") : "none"}\n\n${texts.total[lang]}: ${warnings.length}`)
+        .setDescription(`${warnings.length > 0 ? warnings.map(w => `[${w.id}] ${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId) : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n") : "none"}\n\n${texts.total[lang]}: ${warnings.length}`)
         .setColor("GREEN")
         .setTimestamp()
-        reply({ embeds: [warningsEmbed] });
+        reply({ embeds: [warningsEmbed], components: [row] });
     }
 }
