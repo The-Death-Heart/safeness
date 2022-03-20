@@ -3,6 +3,7 @@ const db = require("./database/db");
 const logs = require("./logs");
 const fs = require("fs");
 const data = require("./data/data");
+const wait = require("util").promisify(setTimeout);
 const client = new Client({
     intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]
 });
@@ -308,23 +309,34 @@ client.on("interactionCreate", async interaction => {
             let id = await getInput();
             if (isNaN(id.content)) {
                 await id.delete();
-                return repli.edit(texts.errors.notNumber[lang]);
+                repli.edit(texts.errors.notNumber[lang]);
+                await wait(3000);
+                return repli.delete();
             }
             if (!Number.isInteger(Number(id.content))) {
                 await id.delete();
-                return repli.edit(texts.errors.notWhole[lang]);
+                repli.edit(texts.errors.notWhole[lang]);
+                await wait(3000);
+                return repli.delete();
             }
             await id.delete();
             id = Number(id.content);
             const foundId = await db.query("SELECT * FROM warnings WHERE warnings.id = ?", [id]);
             if (!foundId[0]) {
-                return repli.edit("ERR: Invalid ID");
+                repli.edit("ERR: Invalid ID");
+                await wait(3000);
+                return repli.delete();
             }
             if (foundId[0].userId !== targetId) {
-                return repli.edit("ERR: Invalid ID");
+                repli.edit("ERR: Invalid ID");
+                await wait(3000);
+                return repli.delete();
             }
             await db.query("DELETE FROM warnings WHERE warnings.id = ?", [id]);
             await repli.edit("👍");
+            await wait(3000);
+            repli.delete();
+            interaction.message.delete();
         }
     }
 });
