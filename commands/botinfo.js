@@ -58,12 +58,12 @@ module.exports = {
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
         .addField(`Información del bot`, `
-                **${texts.cachedU[lang]}:** ${message.client.users.cache.size}\n
-                **${texts.channels[lang]}:** ${message.client.channels.cache.size}\n
-                **${texts.servers[lang]}:** ${message.client.guilds.cache.size}\n
-                **${texts.usrs[lang]}:** ${totalUsers}\n
-                **${texts.ram[lang]}:** ${memoryUsage}\n
-                **${texts.upt[lang]}:** ${uptime}\n
+                **${texts.cachedU[lang]}:** ${message.client.users.cache.size}
+                **${texts.channels[lang]}:** ${message.client.channels.cache.size}
+                **${texts.servers[lang]}:** ${message.client.guilds.cache.size}
+                **${texts.usrs[lang]}:** ${totalUsers}
+                **${texts.ram[lang]}:** ${memoryUsage}
+                **${texts.upt[lang]}:** ${uptime}
                 `
         )
         .setColor("GREEN")
