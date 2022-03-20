@@ -97,7 +97,7 @@ client.on("messageCreate", async message => {
         }
         else return false;
     });
-    const foundStaff = await db.query("SELECT * FROM staffs WHERE staffs.userId = ?", [message.author.id]);
+    const foundStaff = await db.query("SELECT * FROM staffs WHERE staffs.id = ?", [message.author.id]);
     if (!foundCmd || foundCmd && foundCmd.category === "staff" && !foundStaff[0] || foundStaff[0].rank < foundCmd.minRank) return reply("```\n" + `${prefix}${cmd}\n${createSpaces(prefix.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
     try {
         foundCmd.execute(message, args, reply, getInput, cmd);
