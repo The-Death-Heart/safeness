@@ -268,7 +268,7 @@ client.on("interactionCreate", async interaction => {
             const authorId = data[1];
             const targetId = data[0];
             const deniedResponses = {
-                es: "No puedes usar el la interacción de otro usuario",
+                es: "No puedes usar la interacción de otro usuario",
                 en: "You cannot use the interaction of another user"
             }
             const texts = {
