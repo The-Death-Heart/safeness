@@ -60,6 +60,7 @@ module.exports = {
             }
         }
         let cmd = args[0]
+        const foundStaff = await db.query("SELECT * FROM staffs WHERE staffs.id = ?", [message.author.id]);
         if (!cmd) return reply("```\n" + `${client.prefix}${aliase} {command}\n${createSpaces(`${client.prefix}${aliase} {`.length)}${createArrows("command".length)}\n\nERR: Missing parameter` + "\n```");
         const foundCmd = client.commands.get(cmd) ?? client.commands.find(c => {
             if (c.aliases) {
@@ -68,7 +69,7 @@ module.exports = {
             }
             else return false;
         });
-        if (!foundCmd) return reply("```\n" + `${client.prefix}${aliase} ${cmd}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
+        if (!foundCmd || foundCmd && foundCmd.category === "staff" && !foundStaff[0] || foundStaff[0] && foundStaff[0].rank < foundCmd.minRank) return reply("```\n" + `${client.prefix}${aliase} ${cmd}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
         const row = new MessageActionRow()
         .addComponents(
             new MessageButton()

@@ -82,7 +82,7 @@ module.exports = {
         )
         if (warnings.length > 10) {
             const path = "../warnings.txt";
-            fs.writeFileSync(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}: ${warnings.length}\n\n${warnings.map(w => `[${w.id}] ${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId).tag : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}`);
+            fs.writeFileSync(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}: ${warnings.length}\n\n${warnings.map(w => `[${w.id}] ${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId).user.tag : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}`);
             return reply({ content: texts.limitExceed[lang], files: [path], components: [row] });
         }
         let warningsEmbed = new MessageEmbed()

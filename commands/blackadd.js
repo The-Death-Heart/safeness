@@ -4,7 +4,10 @@ const db = require("../database/db");
 const logs = require("../logs");
 module.exports = {
     name: "blackadd",
-    description: "Agrega un usuario a la lista negra",
+    description: {
+        es: "Agrega a un usuario a la lista negra",
+        en: "Adds a user to the blacklist"
+    },
     category: "staff",
     minRank: 2,
     /**
