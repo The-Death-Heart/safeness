@@ -16,7 +16,13 @@ module.exports = {
  * @param {function} reply 
  * @param {function} getInput 
  */
-    execute: async function (message, args, reply, aliase) {
+    execute: async function (message, args, reply, getInput, aliase) {
+        const done = {
+            es: "Usuario advertido",
+            en: "User warned"
+        }
+        const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
+        const lang = foundLang[0] ? foundLang[0].lang : "es";
         /**
          * 
          * @param {number} length 
@@ -59,7 +65,7 @@ module.exports = {
             await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
             if (dmable) {
                 const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
-                await m.send("```\n" + `warning\nw${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
+                await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
             }
         }
         else {
@@ -68,7 +74,7 @@ module.exports = {
                     await guild.members.fetch(m);
                 }
                 catch (err) {
-                    logs.error("bot", err.stack);
+                    logs.error("bot", err.message);
                 }
                 if (!guild.members.cache.has(m)) return reply("```\n" + `${client.prefix}${aliase} ${m}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(m.length)}\n\nERR: Unknown member` + "\n```");
                 m = guild.members.cache.get(m);
@@ -79,12 +85,12 @@ module.exports = {
                     await msg.delete();
                 }
                 catch (err) {
-                    logs.error("bot", err.stack);
+                    logs.error("bot", err.message);
                 }
                 await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
                 if (dmable) {
                     const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
-                    await m.send("```\n" + `warning\nw${createArrows('warning'.length)}\n\nReason: ${reason}` + "\n```");
+                    await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
                 }
             }
             else {
@@ -96,7 +102,10 @@ module.exports = {
                     }
                     else return false;
                 });
-                if (!m) return reply("```\n" + `${client.prefix}${aliase} ${m}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(m.length)}\n\nERR: Unknown member` + "\n```");
+                if (!m) {
+                    m = args[0];
+                    return reply("```\n" + `${client.prefix}${aliase} ${m}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(m.length)}\n\nERR: Unknown member` + "\n```");
+                }
                 let dmable = false;
                 try {
                     let msg = await m.user.send(".");
@@ -109,9 +118,10 @@ module.exports = {
                 await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
                 if (dmable) {
                     const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
-                    await m.send("```\n" + `warning\nw${createArrows('warning'.length)}\n\nReason: ${reason}` + "\n```");
+                    await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
                 }
             }
         }
+        await reply(done[lang])
     }
 }
