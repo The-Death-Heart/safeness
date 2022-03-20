@@ -46,6 +46,8 @@ client.on("messageCreate", async message => {
     }
     else prefix = data.defaultPrefix;
     client.prefix = prefix;
+    const blacklist = await db.query("SELECT * FROM blacklist");
+    if (blacklist.find(u => u.userId === message.author.id)) return message.react("❌");
     /**
      * @returns {Promise<Message>}
      */
