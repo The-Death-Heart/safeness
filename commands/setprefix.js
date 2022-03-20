@@ -56,7 +56,10 @@ module.exports = {
         if (newPrefix.length > 4) return reply("```\n" + `${client.prefix}setprefix ${newPrefix}\n${createSpaces(`${client.prefix}setprefix`.length + 1)}${createArrows(newPrefix.length)}\n\nERR: New prefix exceeds the 4 characters limit` + "\n```");
         const prefixExists = await db.query("SELECT * FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
         if (prefixExists[0]) {
-            await db.query("UPDATE prefixes SET ? WHERE prefixes.guildId = ?", [{ prefix: newPrefix }, guild.id]);
+            if (newPrefix === data.defaultPrefix) {
+                await db.query("DELETE FROM prefixes WHERE prefixes.guildId = ?", [guild.id]);
+            }
+            else await db.query("UPDATE prefixes SET ? WHERE prefixes.guildId = ?", [{ prefix: newPrefix }, guild.id]);
         }
         else {
             await db.query("INSERT INTO prefixes SET ?", [{ guildId: guild.id, prefix: newPrefix }]);
