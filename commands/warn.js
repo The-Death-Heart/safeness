@@ -62,7 +62,7 @@ module.exports = {
             catch (err) {
                 logs.error("bot", err.stack);
             }
-            await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
+            await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason, modId: author.id }]);
             if (dmable) {
                 const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
                 await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
@@ -87,7 +87,7 @@ module.exports = {
                 catch (err) {
                     logs.error("bot", err.message);
                 }
-                await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
+                await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason, modId: author.id }]);
                 if (dmable) {
                     const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
                     await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");

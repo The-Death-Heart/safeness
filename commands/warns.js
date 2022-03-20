@@ -71,12 +71,12 @@ module.exports = {
         const warnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
         if (warnings.length > 10) {
             const path = "../warnings.txt";
-            await fs.writeFile(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}\n\n${warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId) : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n------------\n")}`);
+            fs.writeFileSync(path, `--------- ${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username} ---------\n${texts.total[lang]}: ${warnings.length}\n\n${warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId).tag : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}`);
             return reply({ content: texts.limitExceed[lang], files: [path] });
         }
         let warningsEmbed = new MessageEmbed()
         .setTitle(`${texts.title[lang]} ${m.nickname ? m.nickname : m.user.username}`)
-        .setDescription(`${warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId) : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n")}\n\n${texts.total[lang]}: ${warnings.length}`)
+        .setDescription(`${warnings.length > 0 ? warnings.map(w => `${texts.mod[lang]}: ${guild.members.cache.has(w.modId) ? guild.members.cache.get(w.modId) : "Unknown"}\n${texts.reason[lang]}: ${w.reason}`).join("\n---------\n") : "none"}\n\n${texts.total[lang]}: ${warnings.length}`)
         .setColor("GREEN")
         .setTimestamp()
         reply({ embeds: [warningsEmbed] });
