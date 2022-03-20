@@ -57,13 +57,13 @@ module.exports = {
         const uptime = moment.duration(message.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
-        .addField(`Información del bot`, `
-                **${texts.cachedU[lang]}:** ${message.client.users.cache.size}
-                **${texts.channels[lang]}:** ${message.client.channels.cache.size}
-                **${texts.servers[lang]}:** ${message.client.guilds.cache.size}
-                **${texts.usrs[lang]}:** ${totalUsers}
-                **${texts.ram[lang]}:** ${memoryUsage}
-                **${texts.upt[lang]}:** ${uptime}
+        .addField(`General:`, `
+                **:bust_in_silhouette:${texts.cachedU[lang]}:** ${message.client.users.cache.size}
+                **:level_slider:${texts.channels[lang]}:** ${message.client.channels.cache.size}
+                **:computer:${texts.servers[lang]}:** ${message.client.guilds.cache.size}
+                **:busts_in_silhouette:${texts.usrs[lang]}:** ${totalUsers}
+                **:floppy_disk:${texts.ram[lang]}:** ${memoryUsage}
+                **:clock1:${texts.upt[lang]}:** ${uptime}
                 `
         )
         .setColor("GREEN")
