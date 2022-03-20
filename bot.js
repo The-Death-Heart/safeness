@@ -292,7 +292,7 @@ client.on("interactionCreate", async interaction => {
                 }
             }
             if (interaction.user.id !== authorId) return interaction.reply({ ephemeral: true, content: deniedResponses[lang] });
-            if (!interaction.member.permissions.has("MANAGE_MEMBERS")) return interaction.reply({ ephemeral: true, content: texts.errors.noPerms[lang] });
+            if (!interaction.member.permissions.has("MODERATE_MEMBERS")) return interaction.reply({ ephemeral: true, content: texts.errors.noPerms[lang] });
             await client.users.fetch(targetId);
             if (!interaction.guild.members.cache.has(targetId)) return interaction.reply({ ephemeral: true, content: "ERR: Member not found" });
             await interaction.deferReply({ ephemeral: false });
