@@ -10,23 +10,28 @@ const data = {
     ranks: {
         1: {
             name: "Soporte",
-            role_id: "955199686480896030"
+            role_id: "955199686480896030",
+            id: 1
         },
         2: {
             name: "Moderador",
-            role_id: "949639525162954792"
+            role_id: "949639525162954792",
+            id: 2
         },
         3: {
             name: "Administrador",
-            role_id: "949639159151218759"
+            role_id: "949639159151218759",
+            id: 3
         },
         4: {
             name: "Director",
-            role_id: "950725408763047958"
+            role_id: "950725408763047958",
+            id: 4
         },
         5: {
             name: "Fundador",
-            role_id: "949636926745509929"
+            role_id: "949636926745509929",
+            id: 5
         }
     }
 }
