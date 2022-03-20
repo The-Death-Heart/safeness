@@ -10,12 +10,12 @@ module.exports = {
     category: "moderation",
     aliases: ["advertir", "send-warning", "enviar-advertencia", "advertencia"],
     /**
- * 
- * @param {Message} message 
- * @param {string[]} args 
- * @param {function} reply 
- * @param {function} getInput 
- */
+     * 
+     * @param {Message} message 
+     * @param {string[]} args 
+     * @param {function} reply 
+     * @param {function} getInput 
+     */
     execute: async function (message, args, reply, getInput, aliase) {
         const done = {
             es: "Usuario advertido",
@@ -115,7 +115,7 @@ module.exports = {
                 catch (err) {
                     logs.error("bot", err.stack);
                 }
-                await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason }]);
+                await db.query("INSERT INTO warnings SET ?", [{ userId: m.user.id, guildId: m.guild.id, reason, modId: author.id }]);
                 if (dmable) {
                     const totalWarnings = await db.query("SELECT * FROM warnings WHERE warnings.userId = ? AND warnings.guildId = ?", [m.user.id, guild.id]);
                     await m.send("```\n" + `warning\n${createArrows('warning'.length)}\n\nReason: ${reason}\nWarnings: ${totalWarnings.length}` + "\n```");
