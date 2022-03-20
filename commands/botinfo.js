@@ -57,31 +57,14 @@ module.exports = {
         const uptime = moment.duration(message.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
-        .addFields(
-            {
-                name: texts.cachedU[lang],
-                value: `\`${message.client.users.cache.size}\``
-            },
-            {
-                name: texts.channels[lang],
-                value: `\`${message.client.channels.cache.size}\``
-            },
-            {
-                name: texts.servers[lang],
-                value: `\`${message.client.guilds.cache.size}\``
-            },
-            {
-                name: texts.usrs[lang],
-                value: `\`${totalUsers}\``
-            },
-            {
-                name: texts.ram[lang],
-                value: `\`${memoryUsage}\``
-            },
-            {
-                name: texts.upt[lang],
-                value: `\`${uptime}\``
-            }
+        .addField(`
+                **${texts.cachedU[lang]}:** ${message.client.users.cache.size}\n
+                **${texts.channels[lang]}:** ${message.client.channels.cache.size}\n
+                **${texts.servers[lang]}:** ${message.client.guilds.cache.size}\n
+                **${texts.usrs[lang]}:** ${totalUsers}\n
+                **${texts.ram[lang]}:** ${memoryUsage}\n
+                **${texts.upt[lang]}:** ${uptime}\n
+                `
         )
         .setColor("GREEN")
         await loadingmsg.delete();
