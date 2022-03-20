@@ -58,12 +58,17 @@ module.exports = {
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
         .addField(`General:`, `
-                **:bust_in_silhouette:${texts.cachedU[lang]}:** ${message.client.users.cache.size}
-                **:level_slider:${texts.channels[lang]}:** ${message.client.channels.cache.size}
-                **:computer:${texts.servers[lang]}:** ${message.client.guilds.cache.size}
-                **:busts_in_silhouette:${texts.usrs[lang]}:** ${totalUsers}
-                **:floppy_disk:${texts.ram[lang]}:** ${memoryUsage}
-                **:clock1:${texts.upt[lang]}:** ${uptime}
+                **:bust_in_silhouette: ${texts.cachedU[lang]}:** ${message.client.users.cache.size}
+                -------------------------------------------
+                **:level_slider: ${texts.channels[lang]}:** ${message.client.channels.cache.size}
+                -------------------------------------------
+                **:computer: ${texts.servers[lang]}:** ${message.client.guilds.cache.size}
+                -------------------------------------------
+                **:busts_in_silhouette: ${texts.usrs[lang]}:** ${totalUsers}
+                -------------------------------------------
+                **:floppy_disk: ${texts.ram[lang]}:** ${memoryUsage}
+                -------------------------------------------
+                **:clock1: ${texts.upt[lang]}:** ${uptime}
                 `
         )
         .setColor("GREEN")
