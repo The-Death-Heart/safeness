@@ -16,6 +16,7 @@ module.exports = {
      * @param {function} getInput 
      * @returns 
      */
+    category: "others",
     execute: async function (message, args, reply, getInput, aliase) {
         const client = message.client;
         const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
