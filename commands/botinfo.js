@@ -52,8 +52,8 @@ module.exports = {
         let loadingmsg = await reply(`Loading...`);
         const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
         const lang = foundLang[0] ? foundLang[0].lang : "es";
-        const totalUsers = message.client.guilds.cache.reduce((a, b) => a.memberCount + b.memberCount);
-        const memoryUsage = `**${formatMemoryUsage(process.memoryUsage().heapUsed)} MB / ${formatMemoryUsage(os.totalmem())} MB**`;
+        const totalUsers = message.client.guilds.cache.size > 1 ? message.client.guilds.cache.reduce((a, b) => a.memberCount + b.memberCount) : message.client.guilds.cache.first().memberCount;
+        const memoryUsage = `${formatMemoryUsage(process.memoryUsage().heapUsed)} MB / ${formatMemoryUsage(os.totalmem())} MB`;
         const uptime = moment.duration(message.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
         const embed = new MessageEmbed()
         .setTitle(texts.title[lang])
