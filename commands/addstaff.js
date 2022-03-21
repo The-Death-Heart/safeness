@@ -45,7 +45,7 @@ module.exports = {
         const target = args[0];
         const rank = args[1];
         if (!target) return reply("```\n" + `${client.prefix}addstaff {userId} {rankId}\n${createSpaces(`${client.prefix}addstaff {`.length)}${createArrows("userId".length)}\n\nERR: Missing parameter` + "\n```");
-        if (!rank) return reply("```\n" + `${client.prefix}addstaff ${target} {rankId}\n${createSpaces(`${client.prefix}addstaff ${target} {`.length)}${createArrows("rankId".length)}` + "\n```");
+        if (!rank) return reply("```\n" + `${client.prefix}addstaff ${target} {rankId}\n${createSpaces(`${client.prefix}addstaff ${target} {`.length)}${createArrows("rankId".length)}\n\nERR: Missing parameter` + "\n```");
         const availableRanks = [...Object.keys(data.ranks)];
         if (!availableRanks.some(r => r === rank)) return reply("```\n" + `${client.prefix}addstaff ${target} ${rank}\n${createSpaces(`${client.prefix}addstaff ${target} `.length)}${createArrows(rank.length)}\n\nERR: Unknown rank` + "\n```");
         let exists = false;
