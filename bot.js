@@ -111,6 +111,7 @@ client.on("messageCreate", async message => {
 client.on("interactionCreate", async interaction => {
     const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [interaction.user.id]);
     const lang = foundLang[0] ? foundLang[0].lang : "es";
+    const foundStaff = await db.query("SELECT * FROM staffs WHERE staffs.id = ?", [interaction.user.id]);
     if (interaction.isSelectMenu()) {
         if (interaction.customId.startsWith("commands-menu")) {
             if (!interaction.guild) return;
@@ -340,6 +341,29 @@ client.on("interactionCreate", async interaction => {
             await wait(3000);
             repli.delete();
             interaction.message.delete();
+        }
+        else if (interaction.customId.startsWith("confirm-staff")) {
+            const idata = interaction.customId.slice("confirm-staff-".length).trim().split("-");
+            const targetId = idata[0];
+            const rankId = idata[1];
+            const authorId = idata[2];
+            if (!foundStaff[0]) return interaction.reply({ ephemeral: true, content: "401 - Not authorized" });
+            if (authorId !== interaction.user.id) return interaction.reply({ ephemeral: true, content: "No puedes aceptar o rechazar por otro staff." });
+            await interaction.deferReply();
+            const role = await client.guilds.cache.get(data.mainGuild).roles.fetch(data.ranks[rankId]);
+            const m = await client.guilds.cache.get(data.mainGuild).members.fetch(targetId);
+            await db.query("INSERT INTO staffs SET ?", [{ id: m.user.id, rank: Number(rankId) }]);
+            await m.roles.add(role);
+            await interaction.editReply("Nuevo staff registrado");
+            await interaction.message.delete();
+        }
+        else if (interaction.customId.startsWith("deciline-staff")) {
+            const idata = interaction.customId.slice("deciline-staff-".length).trim().split("-");
+            const authorId = idata[1];
+            if (!foundStaff[0]) return interaction.reply({ ephemeral: true, content: "401 - Not authorized" });
+            if (authorId !== interaction.user.id) return interaction.reply({ ephemeral: true, content: "No puedes aceptar o rechazar por otro staff." });
+            await interaction.reply("Comando cancelado.");
+            await interaction.message.delete();
         }
     }
 });
