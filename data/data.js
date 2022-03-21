@@ -33,6 +33,7 @@ const data = {
             role_id: "949636926745509929",
             id: 5
         }
-    }
+    },
+    mainGuild: "949039382856347680"
 }
 module.exports = data;
