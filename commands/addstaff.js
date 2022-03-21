@@ -1,6 +1,7 @@
 const { Message, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const data = require("../data/data");
 const db = require("../database/db");
+const logs = require("../logs");
 module.exports = {
     name: "addstaff",
     description: {
