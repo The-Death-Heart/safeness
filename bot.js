@@ -5,7 +5,7 @@ const fs = require("fs");
 const data = require("./data/data");
 const wait = require("util").promisify(setTimeout);
 const client = new Client({
-    intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]
+    intents: ["GUILDS", "GUILD_MESSAGES"]
 });
 
 client.commands = new Collection();
@@ -80,7 +80,7 @@ client.on("messageCreate", async message => {
         const foundLang = await db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
         const lang = foundLang[0] ? foundLang[0].lang : "es";
         const text = {
-            es: `Mi prefijo en este servidor es **${prefix}**\n\nPara ver mis comandos usa el comando ${prefix}comandos\n\nPara obtener info del bot usa el comando \`${prefix}ayuda\`\n\nSi deseas obtener información de un comando concreto, usa \`${prefix}comando {comando}\``,
+            es: `Mi prefijo en este servidor es **${prefix}**\n\nPara ver mis comandos usa el comando \`${prefix}comandos\`\n\nPara obtener info del bot usa el comando \`${prefix}ayuda\`\n\nSi deseas obtener información de un comando concreto, usa \`${prefix}comando {comando}\``,
             en: `My prefix on this server is **${prefix}**\n\nTo see my commands use the command \`${prefix}commands\`\n\nTo get bot's info use the command ${prefix}help\n\nIf you wish to get info of an specific command, use the command \`${prefix}command {command}\``
         }
         return reply(text[lang]);
