@@ -30,7 +30,7 @@ module.exports = {
          * @param {number} length 
          * @returns 
          */
-         function createSpaces(length) {
+        function createSpaces(length) {
             let spaces = "";
             for (let i = 0; i < length; i++) {
                 spaces += " ";
@@ -44,7 +44,7 @@ module.exports = {
          */
         function createArrows(length) {
             let arrows = "";
-            for (let i = 0; i< length; i++) {
+            for (let i = 0; i < length; i++) {
                 arrows += "^";
             }
             return arrows;
@@ -52,7 +52,7 @@ module.exports = {
         const langs = ["es", "en"];
         const targetLang = args[0];
         if (!targetLang) return reply("```\n" + `${client.prefix}setlang {lang}\n${createSpaces(`${client.prefix}setlang {`.length)}${createArrows("lang".length)}\n\nERR: Missing parameter` + "\n```");
-        if (targetLang.length !== 2) return reply("```\n" + `${client.prefix}setlang ${targetLang}\n${createSpaces(`${client.prefix}setlang`.length  + 1)}${createArrows(targetLang.length)}\n\nERR: Lang must be 2 on length, received ${targetLang.length}` + "\n```");
+        if (targetLang.length !== 2) return reply("```\n" + `${client.prefix}setlang ${targetLang}\n${createSpaces(`${client.prefix}setlang`.length + 1)}${createArrows(targetLang.length)}\n\nERR: Lang must be 2 on length, received ${targetLang.length}` + "\n```");
         if (!langs.some(l => l === targetLang)) return reply("```\n" + `${client.prefix}setlang ${targetLang}\n${createSpaces(`${client.prefix}setlang`.length + 1)}${createArrows(targetLang.length)}\n\nERR: Invalid lang` + "\n```");
         if (!foundL[0]) {
             await db.query("INSERT INTO langs SET ?", [{ id: message.author.id, lang: targetLang }]);

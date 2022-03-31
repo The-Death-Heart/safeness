@@ -26,7 +26,7 @@ module.exports = {
          * @param {number} length 
          * @returns 
          */
-         function createSpaces(length) {
+        function createSpaces(length) {
             let spaces = "";
             for (let i = 0; i < length; i++) {
                 spaces += " ";
@@ -40,7 +40,7 @@ module.exports = {
          */
         function createArrows(length) {
             let arrows = "";
-            for (let i = 0; i< length; i++) {
+            for (let i = 0; i < length; i++) {
                 arrows += "^";
             }
             return arrows;
@@ -71,27 +71,27 @@ module.exports = {
         });
         if (!foundCmd || foundCmd && foundCmd.category === "staff" && !foundStaff[0] || foundStaff[0] && foundStaff[0].rank < foundCmd.minRank) return reply("```\n" + `${client.prefix}${aliase} ${cmd}\n${createSpaces(`${client.prefix}${aliase} `.length)}${createArrows(cmd.length)}\n\nERR: Unknown command` + "\n```");
         const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-            .setCustomId(`execute-command-${foundCmd.name}-${message.author.id}-${message.id}`)
-            .setLabel(texts.exec[lang])
-            .setStyle("PRIMARY")
-        );
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`execute-command-${foundCmd.name}-${message.author.id}-${message.id}`)
+                    .setLabel(texts.exec[lang])
+                    .setStyle("PRIMARY")
+            );
         const aliases = foundCmd.aliases ?? [];
         const embed = new MessageEmbed()
-        .setTitle(foundCmd.name)
-        .addFields(
-            {
-                name: texts.desc[lang],
-                value: foundCmd.description[lang]
-            },
-            {
-                name: texts.aliasesText[lang],
-                value: aliases.length > 0 ? aliases.join(", ") : "none"
-            }
-        )
-        .setColor("GREEN")
-        .setTimestamp()
+            .setTitle(foundCmd.name)
+            .addFields(
+                {
+                    name: texts.desc[lang],
+                    value: foundCmd.description[lang]
+                },
+                {
+                    name: texts.aliasesText[lang],
+                    value: aliases.length > 0 ? aliases.join(", ") : "none"
+                }
+            )
+            .setColor("GREEN")
+            .setTimestamp()
         await reply({ embeds: [embed], components: [row] });
     }
 }

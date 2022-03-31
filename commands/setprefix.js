@@ -15,7 +15,7 @@ module.exports = {
      * @param {function} reply 
      * @param {function} getInput 
      */
-    execute: async function(message, args, reply, getInput) {
+    execute: async function (message, args, reply, getInput) {
         const done = {
             es: "Prefijo establecido",
             en: "Prefix established"
@@ -39,7 +39,7 @@ module.exports = {
          */
         function createArrows(length) {
             let arrows = "";
-            for (let i = 0; i< length; i++) {
+            for (let i = 0; i < length; i++) {
                 arrows += "^";
             }
             return arrows;

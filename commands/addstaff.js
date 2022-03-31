@@ -23,7 +23,7 @@ module.exports = {
          * @param {number} length 
          * @returns 
          */
-         function createSpaces(length) {
+        function createSpaces(length) {
             let spaces = "";
             for (let i = 0; i < length; i++) {
                 spaces += " ";
@@ -37,7 +37,7 @@ module.exports = {
          */
         function createArrows(length) {
             let arrows = "";
-            for (let i = 0; i< length; i++) {
+            for (let i = 0; i < length; i++) {
                 arrows += "^";
             }
             return arrows;
@@ -62,16 +62,16 @@ module.exports = {
         const foundU = await db.query("SELECT * FROM staffs WHERE staffs.id = ?", [target]);
         if (foundU[0]) return reply("```\n" + `${client.prefix}addstaff ${target} ${rank}\n${createSpaces(`${client.prefix}addstaff `.length)}${createArrows(target.length)}\n\nERR: The user already is staff` + "\n```");
         const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-            .setCustomId(`confirm-staff-${target}-${rank}-${author.id}`)
-            .setLabel("Confirmar")
-            .setStyle("SUCCESS"),
-            new MessageButton()
-            .setCustomId(`deciline-staff-${target}-${author.id}`)
-            .setLabel("Cancelar")
-            .setStyle("DANGER")
-        )
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`confirm-staff-${target}-${rank}-${author.id}`)
+                    .setLabel("Confirmar")
+                    .setStyle("SUCCESS"),
+                new MessageButton()
+                    .setCustomId(`deciline-staff-${target}-${author.id}`)
+                    .setLabel("Cancelar")
+                    .setStyle("DANGER")
+            )
         await reply({ content: `Esta acción le dará a \`${client.users.cache.get(target).username}\` el rango staff de **${data.ranks[rank].name} (${data.ranks[rank].id})** \n¿Desea continuar?`, components: [row] });
     }
 }

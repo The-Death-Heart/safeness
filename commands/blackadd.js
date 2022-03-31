@@ -23,7 +23,7 @@ module.exports = {
          * @param {number} length 
          * @returns 
          */
-         function createSpaces(length) {
+        function createSpaces(length) {
             let spaces = "";
             for (let i = 0; i < length; i++) {
                 spaces += " ";
@@ -37,7 +37,7 @@ module.exports = {
          */
         function createArrows(length) {
             let arrows = "";
-            for (let i = 0; i< length; i++) {
+            for (let i = 0; i < length; i++) {
                 arrows += "^";
             }
             return arrows;
