@@ -3,8 +3,8 @@ const db = require("../database/db");
 module.exports = {
     name: "commands",
     description: {
-        es: "Despliega este menu",
-        en: "Displays this menu"
+        es: "Muestra los comandos disponibles",
+        en: "Shows available commands"
     },
     category: "others",
     aliases: ["comandos"],
