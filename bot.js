@@ -400,5 +400,4 @@ function createArrows(length) {
     }
     return arrows;
 }
-
 client.login(data.token);
