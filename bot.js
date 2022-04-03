@@ -7,6 +7,15 @@ const wait = require("util").promisify(setTimeout);
 const client = new Client({
     intents: ["GUILDS", "GUILD_MESSAGES"]
 });
+
+process.on("unhandledRejection", (err) => {
+    logs.error("system", err.stack);
+});
+
+process.on("uncaughtException", (err) => {
+    logs.error("system", err.stack);
+});
+
 function fetchMainGuild() {
     return client.guilds.cache.get(data.mainGuild);
 }
