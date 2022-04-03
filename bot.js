@@ -359,8 +359,8 @@ client.on("interactionCreate", async interaction => {
             if (!foundStaff[0]) return interaction.reply({ ephemeral: true, content: "401 - Not authorized" });
             if (authorId !== interaction.user.id) return interaction.reply({ ephemeral: true, content: "No puedes aceptar o rechazar por otro staff." });
             await interaction.deferReply();
-            const role = await client.guilds.cache.get(data.mainGuild).roles.fetch(data.ranks[rankId].role_id);
-            const m = await client.guilds.cache.get(data.mainGuild).members.fetch(targetId);
+            const role = await fetchMainGuild().roles.fetch(data.ranks[rankId].role_id);
+            const m = await fetchMainGuild().members.fetch(targetId);
             await db.query("INSERT INTO staffs SET ?", [{ id: m.user.id, rank: Number(rankId) }]);
             await m.roles.add(role);
             await interaction.editReply("Nuevo staff registrado");
