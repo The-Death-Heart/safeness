@@ -7,6 +7,15 @@ const wait = require("util").promisify(setTimeout);
 const client = new Client({
     intents: ["GUILDS", "GUILD_MESSAGES"]
 });
+function fetchMainGuild() {
+    return client.guilds.cache.get(data.mainGuild);
+}
+/**
+ * @param {string} id
+ */
+function fetchGuild(id) {
+    return client.guilds.cache.get(id);
+}
 
 client.commands = new Collection();
 
