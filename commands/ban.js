@@ -15,7 +15,7 @@ module.exports = {
      * @param {function} getInput
      * @param {string} aliase
      */
-    execeute: async (message, args, reply, getInput, aliase) => {
+    execute: async (message, args, reply, getInput, aliase) => {
         const foundLang = db.query("SELECT * FROM langs WHERE langs.id = ?", [message.author.id]);
         const lang = foundLang ? foundLang[0].lang : "es";
         const { guild, member, author, client, channel } = message;
